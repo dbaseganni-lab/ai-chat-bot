@@ -1,0 +1,179 @@
+import random
+import time
+from datetime import datetime
+
+# Predefined responses
+greetings = ["hi", "hello", "hey", "hola", "howdy"]
+farewells = ["bye", "goodbye", "see you", "later", "quit"]
+
+responses = {
+    "greeting": ["Hello there!", "Hi!", "Hey!", "How can I help you today?"],
+    "farewell": ["Goodbye!", "See you later!", "Take care!", "Bye! 👋"],
+    "default": ["I'm not sure I understand.", "Can you rephrase that?", "Interesting... tell me more."]
+}
+
+# Knowledge base
+knowledge_base = {
+    "what is your name": "I'm a simple AI chatbot created in Python.",
+    "how are you": "I'm just code, but thanks for asking!",
+    "what is ai": "AI stands for Artificial Intelligence — it's about machines thinking like humans.",
+    "what can you do": "I can chat with you and answer simple questions. Try typing 'help'!",
+    "what is python": "Python is a popular programming language used for many things.",
+    "who created you": "I was created by a programmer using Python code.",
+    "what is machine learning": "Machine learning is a type of AI that allows systems to learn and improve from experience.",
+    "what is the capital of france": "The capital of France is Paris.",
+    "who is the president of the united states": "As of 2025, the President of the United States is Joe Biden.",
+    "what is the time": f"The current time is {datetime.now().strftime('%H:%M:%S')}.",
+    "what is the date": f"Today's date is {datetime.now().strftime('%Y-%m-%d')}.",
+    "what is data science": "Data science involves analyzing and interpreting complex data to help make decisions.",
+    "what is the internet": "The internet is a global network connecting millions of computers for communication and data sharing.",
+    "tell me a joke": "Why did the computer show up late to work? Because it had a hard drive!",
+    "what is a chatbot": "A chatbot is a program designed to simulate conversation with humans.",
+    "what is programming": "Programming is the process of writing instructions for computers to perform tasks.",
+    "how old are you": "I'm a few seconds old every time you run me!",
+    "what is your purpose": "My purpose is to chat with you and answer basic questions.",
+    "what is cloud computing": "Cloud computing lets you store and access data and programs over the internet instead of your computer's hard drive.",
+    "what is cybersecurity": "Cybersecurity is the protection of computer systems and networks from digital attacks.",
+    "who are you": "I'm a chatbot made with Python. I'm here to answer your questions.",
+    "what is programming language": "A programming language is a way to communicate with computers using code.",
+    "what is html": "HTML stands for HyperText Markup Language. It's used to create web pages.",
+    "what is css": "CSS stands for Cascading Style Sheets. It styles how HTML content looks on the web.",
+    "what is javascript": "JavaScript is a programming language used to make websites interactive.",
+    "what is a computer": "A computer is an electronic device that processes data and performs tasks according to instructions.",
+    "what is electricity": "Electricity is the flow of electric charge, commonly used to power devices.",
+    "what is water": "Water is a transparent, tasteless, odorless liquid essential for life.",
+    "what is the sun": "The sun is the star at the center of our solar system. It provides light and energy to Earth.",
+    "what is the moon": "The moon is Earth's only natural satellite and it affects tides on our planet.",
+    "who is albert einstein": "Albert Einstein was a physicist who developed the theory of relativity.",
+    "what is gravity": "Gravity is the force that attracts two bodies toward each other, like you to the Earth.",
+    "what is space": "Space is the vast, seemingly infinite expanse that exists beyond Earth's atmosphere.",
+    "what is a robot": "A robot is a machine capable of carrying out tasks automatically or with some guidance.",
+    "what is a database": "A database is an organized collection of data, typically stored and accessed electronically.",
+    "what is sql": "SQL stands for Structured Query Language. It is used to manage and retrieve data in databases.",
+    "what is linux": "Linux is an open-source operating system based on Unix.",
+    "what is android": "Android is a mobile operating system developed by Google.",
+    "what is ios": "iOS is the operating system used by Apple for iPhones and iPads.",
+    "what is google": "Google is a tech company known for its search engine, and many other tools and services.",
+    "what is facebook": "Facebook is a social media platform where users can share messages, photos, and videos.",
+    "who is elon musk": "Elon Musk is a billionaire entrepreneur known for Tesla, SpaceX, and more.",
+    "who is bill gates": "Bill Gates is the co-founder of Microsoft and a philanthropist.",
+    "what is microsoft": "Microsoft is a technology company known for Windows, Office, and more.",
+    "what is apple": "Apple is a technology company known for iPhones, Macs, and other products.",
+    "what is a smartphone": "A smartphone is a mobile phone that includes advanced functionality beyond making calls and texts.",
+    "how does the internet work": "The internet is a network of computers connected globally, sharing information using protocols.",
+    "what is 5g": "5G is the fifth-generation mobile network that offers faster speeds and lower latency than 4G.",
+    "what is a website": "A website is a collection of web pages accessed through the internet.",
+    "what is a virus": "In computers, a virus is malicious code that can replicate and spread, causing damage.",
+    "what is an app": "An app is a software application designed to perform a specific task on a device.",
+    "what is a galaxy": "A galaxy is a huge collection of gas, dust, and billions of stars and their solar systems.",
+    "what is the milky way": "The Milky Way is the galaxy that contains our solar system.",
+    "what is a black hole": "A black hole is a region in space where gravity is so strong that not even light can escape.",
+    "what is light": "Light is electromagnetic radiation that can be seen by the human eye.",
+    "what is sound": "Sound is a vibration that travels through a medium, such as air or water, and can be heard.",
+    "what is an atom": "An atom is the smallest unit of ordinary matter that forms a chemical element.",
+    "what is evolution": "Evolution is the process by which different kinds of living organisms develop and diversify over generations.",
+    "what is climate change": "Climate change refers to long-term shifts in temperatures and weather patterns, mostly due to human activities.",
+    "what is the human brain": "The brain is the control center of the human body, responsible for thought, memory, and emotions.",
+    "what is dna": "DNA is a molecule that carries genetic information used in the growth and development of living things.",
+    "what is the internet of things": "The Internet of Things (IoT) refers to physical devices connected to the internet that collect and exchange data.",
+    "what is virtual reality": "Virtual reality is a simulated experience that can be similar to or completely different from the real world.",
+    "what is augmented reality": "Augmented reality overlays digital information onto the real world through devices like smartphones or glasses.",
+    "what is a drone": "A drone is an unmanned aerial vehicle used for photography, delivery, surveillance, and more.",
+    "what is cryptocurrency": "Cryptocurrency is a digital or virtual currency that uses cryptography for security.",
+    "what is bitcoin": "Bitcoin is the first and most well-known cryptocurrency, created in 2009.",
+    "what is blockchain": "Blockchain is a system of recording information in a way that makes it difficult or impossible to change or hack.",
+    "what is email": "Email is a method of exchanging digital messages over the internet.",
+    "what is a server": "A server is a computer or system that provides data or services to other computers over a network.",
+    "what is a client": "A client is a device or program that accesses services provided by a server.",
+    "what is an ip address": "An IP address is a unique address that identifies a device on the internet or a local network.",
+    "what is a password": "A password is a secret string of characters used to authenticate a user's identity.",
+    "what is the cloud": "The cloud refers to servers accessed over the internet, and the software and databases that run on them.",
+    "what is zoom": "Zoom is a video conferencing platform used for meetings, classes, and virtual gatherings.",
+    "what is youtube": "YouTube is a platform for sharing and watching videos online.",
+    "what is instagram": "Instagram is a social media app for sharing photos and videos.",
+    "what is whatsapp": "WhatsApp is a messaging app that allows users to send texts, make calls, and share media.",
+    "what is a meme": "A meme is a humorous image, video, or text that is shared and spread rapidly online.",
+    "tell me a fun fact": "Octopuses have three hearts and blue blood!",
+    "what is the tallest mountain": "Mount Everest is the tallest mountain on Earth above sea level.",
+    "what is the biggest animal": "The blue whale is the largest animal known to have ever existed.",
+    "how many continents are there": "There are seven continents: Africa, Antarctica, Asia, Australia, Europe, North America, and South America.",
+
+
+}
+# Memory to store user inputs
+memory = []
+
+# Clean and normalize user input
+def clean_input(text):
+    return text.strip().lower()
+
+# Match user input to intent or known answer
+def match_intent(user_input):
+    cleaned = clean_input(user_input)
+
+    if any(word in cleaned for word in greetings):
+        return "greeting"
+    if any(word in cleaned for word in farewells):
+        return "farewell"
+    if cleaned in knowledge_base:
+        return knowledge_base[cleaned]
+    return "default"
+
+# Get a response based on the matched intent
+def get_response(intent):
+    if intent in responses:
+        return random.choice(responses[intent])
+    elif intent in knowledge_base.values():
+        return intent
+    else:
+        return random.choice(responses["default"])
+
+# Save user input to memory
+def remember(user_input):
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    memory.append(f"[{timestamp}] {user_input}")
+    if len(memory) > 10:
+        memory.pop(0)
+
+# Show remembered conversation history
+def show_memory():
+    print("\n🧠 Conversation Memory:")
+    for entry in memory:
+        print("•", entry)
+
+# Show help / knowledge base
+def show_help():
+    print("\n🤖 Try asking me things like:")
+    for question in knowledge_base:
+        print("•", question.capitalize())
+
+# Main chatbot loop
+def main():
+    print("="*45)
+    print("🤖 Welcome to the Python Chatbot!")
+    print("Type something to start chatting.")
+    print("Type 'help' for examples or 'quit' to exit.")
+    print("="*45)
+
+    while True:
+        user_input = input("\nYou: ")
+        cleaned = clean_input(user_input)
+
+        if cleaned == "quit":
+            show_memory()
+            print("\n🤖 Chatbot: It was nice talking to you. Bye!")
+            break
+
+        if cleaned == "help":
+            show_help()
+            continue
+
+        remember(user_input)
+        intent = match_intent(cleaned)
+        bot_reply = get_response(intent)
+
+        time.sleep(0.5)  # Simulate thinking
+        print("🤖 Chatbot:", bot_reply)
+
+if __name__ == "__main__":
+    main()
